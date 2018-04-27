@@ -1,0 +1,4 @@
+name: lasercorridor
+dependencies:
+  - opencv-python
+  - numpy
