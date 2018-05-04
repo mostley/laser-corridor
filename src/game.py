@@ -1,4 +1,5 @@
 from detector import Detector
+from finishsounds import Finishsounds
 from framesource import FrameSource
 from music import Music
 from window import Window
@@ -14,9 +15,12 @@ class Game:
         self.music = Music()
         self.window = Window()
 
-        self.buzzerFile = 'buzzer.wav'
+        self.finishSounds = {
+            Finishsounds.success: 'mario-victory.wav',
+            Finishsounds.failure: 'siren.wav',
+            Finishsounds.timeIsUp: 'buzzer.wav'
+        }
         self.soundtrackFile = 'mi-full.wav'
-        self.sirenFile = 'siren.wav'
         self.duration = 10
         self.currentKeypoints = None
         self.previousKeypoints = None
@@ -25,13 +29,11 @@ class Game:
     def run(self):
         self.numKeypoints = len(self.getStartKeypoints())
         self.running = True
-        self.music.play(self.soundtrackFile, 10)
+        self.music.play(self.soundtrackFile, self.duration)
 
         while self.running:
             if self.music.checkDuration():
-                self.music.play(self.buzzerFile)
-                time.sleep(3)
-                break
+                self.finish(Finishsounds.timeIsUp)
 
             check, frame = self.frameSource.grabFrame()
 
@@ -45,9 +47,7 @@ class Game:
             self.window.showFrame(frame_with_keypoints)
 
             if len(self.currentKeypoints) != self.numKeypoints:
-                self.music.play(self.sirenFile)
-                time.sleep(3)
-                break
+                self.finish(Finishsounds.failure)
 
             if self.previousKeypoints != None:
                 self.update()
@@ -55,6 +55,17 @@ class Game:
             key = cv2.waitKey(50)
             if key == ord('q'):
                 break
+
+            key = cv2.waitKey(32)
+            if key == ord(' '):
+                self.finish(Finishsounds.success)
+
+    def finish(self, result):
+        soundfile = self.finishSounds[result]
+        self.music.play(soundfile)
+        time.sleep(3)
+        self.running = False
+
 
     def getStartKeypoints(self):
         check, frame = self.frameSource.grabFrame()
