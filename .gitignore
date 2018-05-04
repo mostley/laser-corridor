@@ -103,3 +103,4 @@ ENV/
 # IDE
 .idea/
 .vscode/
+src/sounds/

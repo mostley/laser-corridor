@@ -1,5 +1,6 @@
 from detector import Detector
 from framesource import FrameSource
+from music import Music
 from window import Window
 
 import cv2
@@ -9,6 +10,7 @@ class Game:
         self.running = False
         self.detector = Detector()
         self.frameSource = FrameSource()
+        self.music = Music()
         self.window = Window()
 
         self.currentKeypoints = None
@@ -16,6 +18,8 @@ class Game:
 
     def run(self):
         self.running = True
+        self.music.play('mi-full.wav', 30)
+
 
         while self.running:
             check, frame = self.frameSource.grabFrame()
