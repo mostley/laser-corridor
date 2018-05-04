@@ -23,30 +23,21 @@ class Game:
         }
         self.soundtrackFile = 'mi-full.wav'
         self.duration = 10
+        self.numKeypoints = 0
         self.currentKeypoints = None
         self.previousKeypoints = None
-        self.numKeypoints = 0
 
     def run(self):
         self.start()
 
         while self.running:
             key = cv2.waitKey(50)
-            if key == ord('q'):
-                break
-            elif key == ord(' ') and not self.isPaused:
-                self.finish(Finishsounds.success)
-            elif key == ord('s'):
-                self.start()
-            elif key == ord('p'):
-                self.togglepause()
-            elif key == ord('e'):
-                self.stop()
+            self.keyHandler(key)
 
             if self.isPaused:
                 continue
 
-            if self.music.playtime_finished():
+            if self.music.playtimeFinished():
                 self.finish(Finishsounds.timeIsUp)
 
             check, frame = self.frameSource.grabFrame()
@@ -69,12 +60,12 @@ class Game:
     def start(self):
         self.running = True
         self.isPaused = False
-        self.numKeypoints = len(self.getkeypoints())
+        self.numKeypoints = len(self.getKeypoints())
         self.music.play(self.soundtrackFile, self.duration)
         print('New game started')
 
-    def togglepause(self):
-        self.music.togglepause()
+    def togglePause(self):
+        self.music.togglePause()
         if self.isPaused:
             print('Game resumed')
         else:
@@ -87,20 +78,37 @@ class Game:
         print('Game stopped')
 
     def finish(self, result):
-        if not self.music.currentFile == self.soundtrackFile:
-            return
-        soundfile = self.finishSounds[result]
-        print('Game ended on ' + result.name + ' after ' + str(self.music.get_playtime()) + ' seconds ')
-        self.music.play(soundfile)
+        if self.music.currentFile == self.soundtrackFile:
+            soundfile = self.finishSounds[result]
+            print('Game ended on ' + result.name + ' after ' + str(self.music.getPlaytime()) + ' seconds ')
+            self.music.play(soundfile)
 
     def update(self):
         pass
 
-    def getkeypoints(self):
+    def getKeypoints(self):
         check, frame = self.frameSource.grabFrame()
         keypoints, frame_with_keypoints = self.detector.detect(frame)
         return keypoints
-    
+
+    def keyHandler(self, key):
+        # Start game
+        if key == ord('s'):
+            self.start()
+        # Pause/resume game
+        elif key == ord('p'):
+            self.togglePause()
+        # End game
+        elif key == ord('e'):
+            self.stop()
+        # Quit game
+        elif key == ord('q'):
+            self.running = False
+        # Trigger succeed event
+        elif key == ord(' ') and not self.isPaused:
+            self.finish(Finishsounds.success)
+
+
     def destroy(self):
         self.music.destroy()
         self.frameSource.destroy()

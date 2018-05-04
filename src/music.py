@@ -22,7 +22,7 @@ class Music:
         pygame.mixer.music.play(0)
         self.start = time.time()
 
-    def togglepause(self):
+    def togglePause(self):
         if pygame.mixer.music.get_busy():
             if self.isPaused:
                 pygame.mixer.music.unpause()
@@ -35,11 +35,11 @@ class Music:
             self.currentFile = ''
             pygame.mixer.music.stop()
 
-    def playtime_finished(self):
-        is_finished = self.duration > 0 and time.time() - self.start > self.duration
-        return is_finished
+    def playtimeFinished(self):
+        isFinished = self.duration > 0 and time.time() - self.start > self.duration
+        return isFinished
 
-    def get_playtime(self):
+    def getPlaytime(self):
         playtime = 0
         if pygame.mixer.music.get_busy():
             playtime = time.time() - self.start
