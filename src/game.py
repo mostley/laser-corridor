@@ -4,6 +4,7 @@ from music import Music
 from window import Window
 
 import cv2
+import time
 
 class Game:
     def __init__(self):
@@ -15,17 +16,22 @@ class Game:
 
         self.buzzerFile = 'buzzer.wav'
         self.soundtrackFile = 'mi-full.wav'
+        self.sirenFile = 'siren.wav'
         self.duration = 10
         self.currentKeypoints = None
         self.previousKeypoints = None
+        self.numKeypoints = 0
 
     def run(self):
+        self.numKeypoints = len(self.getStartKeypoints())
         self.running = True
         self.music.play(self.soundtrackFile, 10)
 
         while self.running:
             if self.music.checkDuration():
                 self.music.play(self.buzzerFile)
+                time.sleep(3)
+                break
 
             check, frame = self.frameSource.grabFrame()
 
@@ -38,6 +44,11 @@ class Game:
 
             self.window.showFrame(frame_with_keypoints)
 
+            if len(self.currentKeypoints) != self.numKeypoints:
+                self.music.play(self.sirenFile)
+                time.sleep(3)
+                break
+
             if self.previousKeypoints != None:
                 self.update()
             
@@ -45,6 +56,10 @@ class Game:
             if key == ord('q'):
                 break
 
+    def getStartKeypoints(self):
+        check, frame = self.frameSource.grabFrame()
+        keypoints, frame_with_keypoints = self.detector.detect(frame)
+        return keypoints
 
     def update(self):
         pass
