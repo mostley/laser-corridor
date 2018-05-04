@@ -103,4 +103,6 @@ ENV/
 # IDE
 .idea/
 .vscode/
-src/sounds/
+
+src/sounds/*
+!buzzer.wav
