@@ -13,17 +13,19 @@ class Game:
         self.music = Music()
         self.window = Window()
 
+        self.buzzerFile = 'buzzer.wav'
+        self.soundtrackFile = 'mi-full.wav'
         self.duration = 10
         self.currentKeypoints = None
         self.previousKeypoints = None
 
     def run(self):
         self.running = True
-        self.music.play('mi-full.wav', 10)
+        self.music.play(self.soundtrackFile, 10)
 
         while self.running:
             if self.music.checkDuration():
-                self.music.play('siren.wav')
+                self.music.play(self.buzzerFile)
 
             check, frame = self.frameSource.grabFrame()
 
