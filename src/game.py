@@ -22,7 +22,8 @@ class Game:
         self.music.play('mi-full.wav', 10)
 
         while self.running:
-            self.music.checkDuration()
+            if self.music.checkDuration():
+                self.music.play('siren.wav')
 
             check, frame = self.frameSource.grabFrame()
 

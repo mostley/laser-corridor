@@ -8,7 +8,7 @@ class Music:
         self.start = 0
         pygame.init()
 
-    def play(self, file, duration):
+    def play(self, file, duration=0):
         self.duration = duration
         if pygame.mixer.music.get_busy():
             self.stop()
@@ -21,5 +21,7 @@ class Music:
             pygame.mixer.music.stop()
 
     def checkDuration(self):
-        if self.duration > 0 & time.time() - self.start > self.duration:
+        if self.duration > 0 and time.time() - self.start > self.duration:
             self.stop()
+            return True
+        return False
