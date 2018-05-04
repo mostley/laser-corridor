@@ -13,15 +13,17 @@ class Game:
         self.music = Music()
         self.window = Window()
 
+        self.duration = 10
         self.currentKeypoints = None
         self.previousKeypoints = None
 
     def run(self):
         self.running = True
-        self.music.play('mi-full.wav', 30)
-
+        self.music.play('mi-full.wav', 10)
 
         while self.running:
+            self.music.checkDuration()
+
             check, frame = self.frameSource.grabFrame()
 
             if not check:
