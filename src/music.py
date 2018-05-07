@@ -13,6 +13,7 @@ class Music:
 
     def play(self, file, duration=0):
         self.duration = duration
+        self.isPaused = False
 
         if pygame.mixer.music.get_busy():
             self.stop()
