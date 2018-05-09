@@ -13,7 +13,7 @@ class Detector:
 
     def detect(self, frame):
         # keypoints = self.detector.detect(frame)
-        retval, threshold = cv2.threshold(frame, 50, 255, cv2.THRESH_BINARY_INV)
+        retval, threshold = cv2.threshold(frame, 1, 255, cv2.THRESH_BINARY_INV)
         keypoints = self.detector.detect(threshold)
 
         frame_with_keypoints = cv2.drawKeypoints(frame, keypoints, np.array([]), (0, 0, 255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)

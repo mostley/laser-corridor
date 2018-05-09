@@ -16,7 +16,7 @@ class FrameSource:
         check, frame = self.capture.read()
 
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        frame = cv2.threshold(frame, 160, 255, cv2.THRESH_BINARY)[1]
+        frame = cv2.threshold(frame, 180, 255, cv2.THRESH_BINARY)[1]
         frame = cv2.GaussianBlur(frame, (5, 5), 0)
 
         return check, frame
