@@ -22,7 +22,7 @@ class Game:
             Finishsounds.timeIsUp: 'buzzer.wav'
         }
         self.soundtrackFile = 'mi-full.wav'
-        self.duration = 10
+        self.duration = 30
         self.numKeypoints = 0
         self.currentKeypoints = None
         self.previousKeypoints = None
