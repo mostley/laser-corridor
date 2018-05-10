@@ -7,10 +7,10 @@ A laser security grid based kids game using [OpenCV](http://opencv.org/).
     ``` bash
     git clone https://github.com/mostley/laser-corridor.git
     ```
-2. Install dependencies for python
+2. Install dependencies for python (Differs from OS and package manager)
     ``` bash
-    pip install opencv-python
     pip install numpy
+    pip install opencv-python
     ```
 3. Import and configure sounds
 4. Start game
@@ -30,7 +30,10 @@ self.finishSounds = {
 ```
 
 ## Configuration
-| Attribute | Default Value | Description |
-| :--- | :--- | :--- |
-| *game.duration* | `30` | An int value that sets the game/soundtrack duration in seconds. |
-| *framesource.capture* | `cv2.VideoCapture(0)` | An object that captures a video with the device index or video file name as parameter.|
+| Attribute | Description |
+| :--- | :--- |
+| *game.duration* | An int value that sets the game/soundtrack duration in seconds. |
+| *framesource.inputVideo* | The device index or video file name |
+| *framesource.minTreshBinary* | An int value between 1 and 254 that sets the threshold for creating binary black/white images |
+| *detector.minTreshDetection* | An int value between 1 and 254 that sets the threshold for detecting white blobs |
+
