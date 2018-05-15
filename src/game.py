@@ -31,8 +31,8 @@ class Game:
         self.start()
 
         while self.running:
-            key = cv2.waitKey(50)
-            self.keyHandler(key)
+            #key = cv2.waitKey(50)
+            #self.keyHandler(key)
 
             if self.isPaused:
                 continue
@@ -40,11 +40,7 @@ class Game:
             if self.music.playtimeFinished():
                 self.finish(Finishsounds.timeIsUp)
 
-            check, frame = self.frameSource.grabFrame()
-
-            if not check:
-                print("no frame found!")
-                continue
+            frame = self.frameSource.grabFrame()
 
             self.previousKeypoints = self.currentKeypoints
             self.currentKeypoints, frame_with_keypoints = self.detector.detect(frame)
@@ -87,7 +83,7 @@ class Game:
         pass
 
     def getKeypoints(self):
-        check, frame = self.frameSource.grabFrame()
+        frame = self.frameSource.grabFrame()
         keypoints, frame_with_keypoints = self.detector.detect(frame)
         return keypoints
 

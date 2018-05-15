@@ -2,22 +2,28 @@ from picamera.array import PiRGBArray
 from picamera import PiCamera
 import cv2
 import time
+import numpy as np
 
 class FrameSource:
     def __init__(self):
-        self.minTreshBinary = 200
-        self.camera = picamera.PiCamera()
-        self.rawCapture = PiRGBArray(camera)
+	self.minTreshBinary = 200
+        #self.camera = PiCamera()
+        #self.rawCapture = PiRGBArray(self.camera)
+	#self.camera.resolution = (640, 480)
+	time.sleep(1)
 
     def grabFrame(self):
-        self.camera.start_preview()
-        time.sleep(1)
-        
-        frame = self.camera.capture(self.rawCapture, format="bgr")
+	with PiCamera() as camera:
+		camera.resolution = (320, 240)
+		camera.framerate = 24
+		time.sleep(1)
+		image = np.numpy((240*320*3,), dtype=np.uint8)
+		camera.capture(image, 'bgr')
 
-        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        frame = cv2.threshold(frame, self.minTreshBinary, 255, cv2.THRESH_BINARY)[1]
-        return frame
-    
+		frame = image.reshape((240, 320, 3))
+		frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+      	 	frame = cv2.threshold(frame, self.minTreshBinary, 255, cv2.THRESH_BINARY)[1]
+		return frame
+
     def destroy(self):
         self.camera.close()
