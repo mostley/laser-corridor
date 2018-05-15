@@ -1,19 +1,20 @@
-from picamera.array import PiRGBArray
-from picamera import PiCamera
 import cv2
 import time
 
 class FrameSource:
     def __init__(self):
+        self.inputVideo = 0
         self.minTreshBinary = 200
-        self.camera = picamera.PiCamera()
-        self.capture = self.camera.capture()
+        self.capture = cv2.VideoCapture(self.inputVideo)
+
+    def getFrameDimension(self):
+        return self.capture.get(3), self.capture.get(4)
 
     def grabFrame(self):
-        self.camera.start_preview()
-        time.sleep(2)
+        while not self.capture.isOpened():
+            time.sleep(1)
         
-        frame = self.camera.capture("bgr")
+        check, frame = self.capture.read()
 
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         frame = cv2.threshold(frame, self.minTreshBinary, 255, cv2.THRESH_BINARY)[1]
@@ -22,4 +23,4 @@ class FrameSource:
         return check, frame
     
     def destroy(self):
-        self.camera.close()
+        self.capture.release()
