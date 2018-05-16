@@ -5,7 +5,8 @@ class Window:
         pass
 
     def showFrame(self, frame):
-        cv2.imshow("Game", frame)
+	print(' ')
+        #cv2.imshow("Game", frame)
     
     def destroy(self):
         cv2.destroyAllWindows()
