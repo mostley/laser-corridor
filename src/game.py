@@ -31,8 +31,8 @@ class Game:
         self.start()
 
         while self.running:
-            key = cv2.waitKey(50)
-            self.keyHandler(key)
+            #key = cv2.waitKey(50)
+            #self.keyHandler(key)
 
             if self.isPaused:
                 continue
@@ -48,7 +48,7 @@ class Game:
 
             self.previousKeypoints = self.currentKeypoints
             self.currentKeypoints, frame_with_keypoints = self.detector.detect(frame)
-
+	    print(len(self.currentKeypoints))
             self.window.showFrame(frame_with_keypoints)
 
             if len(self.currentKeypoints) != self.numKeypoints:
