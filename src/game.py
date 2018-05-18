@@ -44,8 +44,8 @@ class Game:
 
             self.previousKeypoints = self.currentKeypoints
             self.currentKeypoints, frame_with_keypoints = self.detector.detect(frame)
-
-            self.window.showFrame(frame_with_keypoints)
+	    print(len(self.currentKeypoints))
+	    self.window.showFrame(frame_with_keypoints)
 
             if len(self.currentKeypoints) != self.numKeypoints:
                 self.finish(Finishsounds.failure)

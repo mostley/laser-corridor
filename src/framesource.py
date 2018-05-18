@@ -9,27 +9,21 @@ class FrameSource:
     def __init__(self):
 	self.minTreshBinary = 200
 	self.stream = io.BytesIO()
-        #self.camera = PiCamera()
-        #self.rawCapture = PiRGBArray(self.camera)
-	#self.camera.resolution = (640, 480)
+        self.camera = PiCamera()
+        self.rawCapture = PiRGBArray(self.camera)
+	self.camera.start_preview()
+	self.camera.resolution = (1280, 960)
 	time.sleep(1)
 
     def grabFrame(self):
-	with PiCamera() as camera:
-		camera.start_preview()
-		camera.resolution = (320, 240)
-		camera.framerate = 24
-		time.sleep(2)
-		image = np.empty((240 * 320 * 3,), dtype=np.uint8)
-		camera.capture(image, 'bgr')
-		#camera.capture(self.stream, 'jpeg')
-		#buff = np.fromstring(self.stream.getvalue(), dtype=np.uint8)
-		#frame = cv2.imdecode(buff, 1)
+	self.camera.capture(self.rawCapture, format='bgr')
+	frame = self.rawCapture.array
+	self.rawCapture.truncate(0)
 
-		frame = image.reshape((240, 320, 3))
-		frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-      	 	frame = cv2.threshold(frame, self.minTreshBinary, 255, cv2.THRESH_BINARY)[1]
-		return frame
+	frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+      	frame = cv2.threshold(frame, self.minTreshBinary, 255, cv2.THRESH_BINARY)[1]
+	frame = cv2.GaussianBlur(frame, (5, 5), 0)
+	return frame
 
     def destroy(self):
         self.camera.close()
