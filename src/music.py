@@ -6,7 +6,7 @@ class Music:
     def __init__(self):
         self.isPaused = False
         self.duration = 0
-        self.soundPath = './sounds/'
+        self.soundPath = '/home/pi/laser-corridor/src/sounds/'
         self.currentFile = ''
         self.start = 0
         pygame.init()

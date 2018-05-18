@@ -3,7 +3,7 @@ from finishsounds import Finishsounds
 from framesource import FrameSource
 from music import Music
 from window import Window
-
+from input import Input
 import cv2
 
 
@@ -15,6 +15,7 @@ class Game:
         self.frameSource = FrameSource()
         self.music = Music()
         self.window = Window()
+	self.input = Input()
 
         self.finishSounds = {
             Finishsounds.success: 'mario-victory.wav',
@@ -31,9 +32,12 @@ class Game:
         self.start()
 
         while self.running:
+	    switch = self.input.isSwitchToggled()
+            self.keyHandler(switch)
+	    button = self.input.readButton()
             #key = cv2.waitKey(50)
-            #self.keyHandler(key)
-
+            self.keyHandler(button)
+	    self.keyHandler(self.input.readQuitButton())
             if self.isPaused:
                 continue
 
@@ -44,7 +48,7 @@ class Game:
 
             self.previousKeypoints = self.currentKeypoints
             self.currentKeypoints, frame_with_keypoints = self.detector.detect(frame)
-	    print(len(self.currentKeypoints))
+	    #print(len(self.currentKeypoints))
 	    self.window.showFrame(frame_with_keypoints)
 
             if len(self.currentKeypoints) != self.numKeypoints:
@@ -88,27 +92,28 @@ class Game:
         return keypoints
 
     def keyHandler(self, key):
+	#print(key)
         # Start game
-        if key == ord('s'):
+        if key == 'Start':
             self.start()
         # Pause/resume game
-        elif key == ord('p'):
-            self.togglePause()
+        #elif key == ord('p'):
+        #    self.togglePause()
         # End game
-        elif key == ord('e'):
+        elif key == 'Stopp':
             self.stop()
         # Quit game
-        elif key == ord('q'):
+        elif key == 'Quit':
             self.running = False
         # Trigger succeed event
-        elif key == ord(' ') and not self.isPaused:
+        elif key == 'Pressed' and not self.isPaused:
             self.finish(Finishsounds.success)
 
 
     def destroy(self):
         self.music.destroy()
         self.frameSource.destroy()
-        self.window.destroy()
+        #self.window.destroy()
 
 if __name__ == '__main__':
     print('Starting Game')
